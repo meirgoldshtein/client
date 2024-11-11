@@ -13,12 +13,15 @@ function App() {
   return (
     <div className="App">
       <Nav/>
+      <div className="body">
       <Routes>
         <Route path="login" element={<Login/>} />
         <Route path="register" element={<Register/>} />
         <Route path="statistics" element={<Statistics/>} />
         <Route path="votes" element={<Votes/>} />           
       </Routes>
+      </div>
+
     </div>
   )
 }

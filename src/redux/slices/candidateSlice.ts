@@ -14,17 +14,42 @@ const initialData: candidateState = {
 const fetchCandidates = createAsyncThunk('candidates/getList',
     async (_, thunkAPI) => {
         try {
-            const response = await fetch('http://localhost:3000/api/candidates') 
+            const response = await fetch('http://localhost:3000/api/candidates', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token') as string
+                }
+            }) 
             if (!response.ok) {
                 return thunkAPI.rejectWithValue("Couldn't get candidates Please try again")
             }
             const data = await response.json()
-            thunkAPI.fulfillWithValue(data)
+            return data
         } catch (error) {
             return thunkAPI.rejectWithValue('something went wrong')
         }
     })
 
+    const voteForCandidate = createAsyncThunk('candidates/vote',
+    async (id: string, thunkAPI) => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/candidates/vote/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token') as string
+                }
+            }) 
+            if (!response.ok) {
+                return thunkAPI.rejectWithValue("Couldn't vote Please try again")
+            }
+            const data = await response.json()
+            return data
+        } catch (error) {
+            return thunkAPI.rejectWithValue('something went wrong')
+        }
+    })
 
 
 const candidateSlice = createSlice({
@@ -49,5 +74,5 @@ const candidateSlice = createSlice({
         })
     }
 })
-
+export { fetchCandidates, voteForCandidate }
 export default candidateSlice

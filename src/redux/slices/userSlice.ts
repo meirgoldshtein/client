@@ -24,8 +24,9 @@ const fetchLogin = createAsyncThunk('user/login',
                 return thunkAPI.rejectWithValue("Couldn't login Please try again")
             }
             const data = await response.json()
-            console.log('response', data)
-            thunkAPI.fulfillWithValue(data.data)
+            console.log('token', data.token)
+            localStorage.setItem('token', data.token)
+            return data.data
         } catch (error) {
             return thunkAPI.rejectWithValue('something went wrong')
         }
@@ -45,7 +46,7 @@ const fetchRegister = createAsyncThunk('user/register',
                 return thunkAPI.rejectWithValue("Couldn't login Please try again")
             }
             const data = await response.json()
-            thunkAPI.fulfillWithValue(data)
+            return data
         } catch (error) {
             return thunkAPI.rejectWithValue('something went wrong')
         }
@@ -56,7 +57,12 @@ const userSlice = createSlice({
     name: 'user',
     initialState: initialData,
     reducers: {
-       
+       updateVoteStatus: (state, action) => {
+           if (state.user) {
+               state.user.votedFor = action.payload
+               state.user.hasVoted = true
+           }
+       }
     },
     extraReducers: (builder: ActionReducerMapBuilder<userState>) => { 
         builder.addCase(fetchLogin.pending, (state) => {
@@ -70,6 +76,7 @@ const userSlice = createSlice({
             state.status = dataStatus.SUCCESS
         }).addCase(fetchLogin.rejected, (state, action) => {
             state.error = action.error as string
+            console.log(state.error)
             state.user = null
             state.status = dataStatus.FAILED
         }).addCase(fetchRegister.fulfilled, (state, action) => {
@@ -84,5 +91,6 @@ const userSlice = createSlice({
     }
 })
 
+export const { updateVoteStatus } = userSlice.actions
 export { fetchLogin, fetchRegister }
 export default userSlice
