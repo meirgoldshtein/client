@@ -56,7 +56,10 @@ const candidateSlice = createSlice({
     name: 'candidate',
     initialState: initialData,
     reducers: {
-       
+        updateCandidates: (state, action) => {
+             state.candidates = action.payload
+             console.log("update candidates", action.payload)
+             }
     },
     extraReducers: (builder: ActionReducerMapBuilder<candidateState>) => { 
         builder.addCase(fetchCandidates.pending, (state) => {
@@ -74,5 +77,6 @@ const candidateSlice = createSlice({
         })
     }
 })
+export const { updateCandidates } = candidateSlice.actions
 export { fetchCandidates, voteForCandidate }
 export default candidateSlice

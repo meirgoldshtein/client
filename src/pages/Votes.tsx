@@ -1,13 +1,19 @@
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import { RootState, useAppDispatch, useAppSelector } from '../redux/store'
 import { useNavigate } from 'react-router-dom'
-import { fetchCandidates, voteForCandidate } from '../redux/slices/candidateSlice'
+import { fetchCandidates, updateCandidates, voteForCandidate } from '../redux/slices/candidateSlice'
 import { updateVoteStatus } from '../redux/slices/userSlice'
+import io from "socket.io-client";
+
+
+
 export default function Votes() {
   const user = useAppSelector((state: RootState) => state.user)
   const dispatch = useAppDispatch()
   const candidates = useAppSelector((state: RootState) => state.candidates)
   const navigator = useNavigate()
+  // const socket = io(`http://localhost:${import.meta.env.VITE_SOCKET_PORT}`);
+  // const socket = io(import.meta.env.VITE_SOCKET_URL);
 
   useEffect(() => {
     if (!user.user?._id) {
@@ -18,10 +24,12 @@ export default function Votes() {
     }
   }, [user])
 
-  const vote = (id: string) => {
-    dispatch(voteForCandidate(id))
+  const vote = async (id: string) => {
+    await dispatch(voteForCandidate(id))
     dispatch(updateVoteStatus(id))
   }
+  console.log(user.user?.votedFor)
+  console.log(candidates.candidates)
   return (
     <div className='votes'>
       <h1>Votes</h1>
@@ -29,7 +37,7 @@ export default function Votes() {
         <div key={candidate._id} className='candidate'>
           <h2>{candidate.name}</h2>
           <img className='candidate-image' src={candidate.image} alt="candidate image" />
-          <button disabled={user.user?.votedFor === candidate._id} onClick={() => vote(candidate._id)}>
+          <button disabled={user.user?.votedFor === candidate._id} onClick={async() => await vote(candidate._id)}>
             {user.user?.votedFor === candidate._id ? "Your Vote" : "Vote"}
           </button>
         </div>
