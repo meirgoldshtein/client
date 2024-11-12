@@ -64,7 +64,6 @@ const candidateSlice = createSlice({
         builder.addCase(fetchCandidates.pending, (state) => {
              state.status = dataStatus.LOADING 
              state.error = null
-             state.candidates = []
         }).addCase(fetchCandidates.fulfilled, (state, action) => {
             state.candidates = action.payload as unknown as ICandidate[]
             state.error = null

@@ -12,6 +12,7 @@ import { useAppDispatch } from './redux/store'
 import { updateCandidates } from './redux/slices/candidateSlice'
 import { ProtectedUserRoute } from './components.tsx/ProtectedUserRout'
 
+
 function App() {
   const dispatch = useAppDispatch();
 
