@@ -2,8 +2,8 @@ import  { useEffect } from 'react'
 import { RootState, useAppDispatch, useAppSelector } from '../redux/store'
 import { useNavigate } from 'react-router-dom'
 import { fetchCandidates, updateCandidates, voteForCandidate } from '../redux/slices/candidateSlice'
-import { updateVoteStatus } from '../redux/slices/userSlice'
-import io from "socket.io-client";
+import { checkAuth, updateVoteStatus } from '../redux/slices/userSlice'
+
 
 
 
@@ -12,24 +12,16 @@ export default function Votes() {
   const dispatch = useAppDispatch()
   const candidates = useAppSelector((state: RootState) => state.candidates)
   const navigator = useNavigate()
-  // const socket = io(`http://localhost:${import.meta.env.VITE_SOCKET_PORT}`);
-  // const socket = io(import.meta.env.VITE_SOCKET_URL);
 
   useEffect(() => {
-    if (!user.user?._id) {
-      navigator("/login")
-    }
-    else {
-      dispatch(fetchCandidates())
-    }
+      dispatch(fetchCandidates()) 
   }, [user])
 
   const vote = async (id: string) => {
     await dispatch(voteForCandidate(id))
     dispatch(updateVoteStatus(id))
   }
-  console.log(user.user?.votedFor)
-  console.log(candidates.candidates)
+
   return (
     <div className='votes'>
       <h1>Votes</h1>
