@@ -1,8 +1,7 @@
 import  { useEffect } from 'react'
 import { RootState, useAppDispatch, useAppSelector } from '../redux/store'
-import { useNavigate } from 'react-router-dom'
-import { fetchCandidates, updateCandidates, voteForCandidate } from '../redux/slices/candidateSlice'
-import { checkAuth, updateVoteStatus } from '../redux/slices/userSlice'
+import { fetchCandidates,  voteForCandidate } from '../redux/slices/candidateSlice'
+import {  updateVoteStatus } from '../redux/slices/userSlice'
 
 
 
@@ -11,7 +10,7 @@ export default function Votes() {
   const user = useAppSelector((state: RootState) => state.user)
   const dispatch = useAppDispatch()
   const candidates = useAppSelector((state: RootState) => state.candidates)
-  const navigator = useNavigate()
+
 
   useEffect(() => {
       dispatch(fetchCandidates()) 

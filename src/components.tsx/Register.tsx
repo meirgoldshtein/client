@@ -12,8 +12,6 @@ export default function Register() {
  
   useEffect(() => {
     if(user.user?._id){
-      console.log('navigate to votes')
-      console.log(user.user._id)
       navigate("/votes")
     }
   }, [])

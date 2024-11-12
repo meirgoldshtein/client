@@ -10,6 +10,7 @@ import io from 'socket.io-client';
 import { useEffect } from 'react'
 import { useAppDispatch } from './redux/store'
 import { updateCandidates } from './redux/slices/candidateSlice'
+import { ProtectedUserRoute } from './components.tsx/ProtectedUserRout'
 
 function App() {
   const dispatch = useAppDispatch();
@@ -29,7 +30,8 @@ function App() {
         <Route path="login" element={<Login/>} />
         <Route path="register" element={<Register/>} />
         <Route path="statistics" element={<Statistics/>} />
-        <Route path="votes" element={<Votes/>} />           
+        <Route path="votes" element={<ProtectedUserRoute ><Votes/></ProtectedUserRoute>} /> 
+        <Route path="/" element={<ProtectedUserRoute ><Votes/></ProtectedUserRoute>} />                     
       </Routes>
       </div>
 

@@ -58,7 +58,6 @@ const candidateSlice = createSlice({
     reducers: {
         updateCandidates: (state, action) => {
              state.candidates = action.payload
-             console.log("update candidates", action.payload)
              }
     },
     extraReducers: (builder: ActionReducerMapBuilder<candidateState>) => { 

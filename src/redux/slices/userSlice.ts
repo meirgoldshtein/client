@@ -26,7 +26,6 @@ const fetchLogin = createAsyncThunk('user/login',
                 return thunkAPI.rejectWithValue("Couldn't login Please try again")
             }
             const data = await response.json()
-            console.log('token', data.token)
             localStorage.setItem('token', data.token)
             return data.data
         } catch (error) {
@@ -80,7 +79,6 @@ const checkAuth = createAsyncThunk(
             }
 
             const data = await response.json();
-            console.log('token', data.token)
             localStorage.setItem('token', data.token)
             return data.data;
         } catch (error) {
@@ -98,6 +96,12 @@ const userSlice = createSlice({
                 state.user.votedFor = action.payload
                 state.user.hasVoted = true
             }
+        },
+        logout: (state) => {
+            state.user = null
+            state.isAuthenticated = false
+            localStorage.setItem("token","")
+
         }
     },
     extraReducers: (builder: ActionReducerMapBuilder<userState>) => {
@@ -106,14 +110,12 @@ const userSlice = createSlice({
             state.error = null
             state.user = null
         }).addCase(fetchLogin.fulfilled, (state, action) => {
-            console.log('login', action.payload)
             state.user = action.payload as unknown as IUser
             state.error = null
             state.isAuthenticated = true
             state.status = dataStatus.SUCCESS
         }).addCase(fetchLogin.rejected, (state, action) => {
             state.error = action.error as string
-            console.log(state.error)
             state.isAuthenticated = false
             state.user = null
             state.status = dataStatus.FAILED
@@ -129,22 +131,19 @@ const userSlice = createSlice({
             state.user = action.payload as unknown as IUser
             state.status = dataStatus.SUCCESS
             state.isAuthenticated = true
-            console.log("fulfilled")
         }).addCase(checkAuth.rejected, (state, action) => {
             state.error = action.error as string
             state.user = null
             state.isAuthenticated = false
             state.status = dataStatus.FAILED
-            console.log("rejected")
         }).addCase(checkAuth.pending, (state) => {
             state.status = dataStatus.LOADING
             state.error = null
             state.user = null
-            console.log("pending")
         })
     }
 })
 
-export const { updateVoteStatus } = userSlice.actions
+export const { updateVoteStatus, logout } = userSlice.actions
 export { fetchLogin, fetchRegister, checkAuth }
 export default userSlice

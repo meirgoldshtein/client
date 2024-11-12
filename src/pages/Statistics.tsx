@@ -9,8 +9,6 @@ export default function Statistics() {
   const navigate = useNavigate()
  useEffect(() => {
     if(user.user?._id && !user.user.isAdmin){
-      console.log('navigate to votes')
-      console.log(user.user._id)
       navigate("/votes")
     }
     else if(!user.user?._id){
